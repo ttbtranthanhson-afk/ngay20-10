@@ -25,6 +25,7 @@ const imageUrls = [
     "BichNgoc.jpg"
 ];
 
+// ===================== HIỆU ỨNG HẠT TRÁI TIM =====================
 const canvas = document.getElementById("heartCanvas");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -50,8 +51,8 @@ function createParticles() {
     const centerX = box.left + box.width / 2;
     const centerY = box.top + box.height / 2;
     
-    // Giảm tỷ lệ scale trên di động để trái tim không quá lớn và bị che
-    const scaleFactor = window.innerWidth > 600 ? 0.6 : 0.45; 
+    // Tối ưu hóa: Giảm tỷ lệ scale trên di động để trái tim không quá lớn
+    const scaleFactor = window.innerWidth > 600 ? 0.6 : 0.35; 
     const scale = Math.min(window.innerWidth, window.innerHeight) * scaleFactor;
 
     for (let i = 0; i < heartPoints.length; i++) {
@@ -79,7 +80,7 @@ function drawParticles() {
     }
 }
 
-// Thay đổi mouse object thành một vị trí ảo để xử lý cả chuột và chạm
+// Dùng một đối tượng duy nhất để xử lý cả chuột và chạm
 const pointer = { x: undefined, y: undefined, radius: 90 };
 
 window.addEventListener("mousemove", (e) => {
@@ -92,9 +93,6 @@ window.addEventListener("touchstart", (e) => {
     const touch = e.touches[0];
     pointer.x = touch.clientX;
     pointer.y = touch.clientY;
-    
-    // Bắt đầu phát nhạc khi có tương tác (chạm đầu tiên)
-    playMusic(); 
 });
 
 window.addEventListener("touchmove", (e) => {
@@ -105,15 +103,17 @@ window.addEventListener("touchmove", (e) => {
 });
 
 window.addEventListener("touchend", () => {
-    // Khi ngón tay nhấc lên, đặt vị trí xa để hạt trở về ban đầu
-    pointer.x = undefined;
+    // Đặt vị trí xa để hạt trở về ban đầu khi nhấc ngón tay
+    pointer.x = undefined; 
     pointer.y = undefined;
 });
 
+
 function animateParticles() {
-    // Nếu không có tương tác, dùng vị trí undefined
-    if (pointer.x !== undefined) {
-        for (let p of particles) {
+    const hasPointerInteraction = pointer.x !== undefined && pointer.y !== undefined;
+
+    for (let p of particles) {
+        if (hasPointerInteraction) {
             const dx = pointer.x - p.x;
             const dy = pointer.y - p.y;
             const distance = Math.sqrt(dx * dx + dy * dy);
@@ -127,10 +127,8 @@ function animateParticles() {
                 p.x += (p.baseX - p.x) * 0.05;
                 p.y += (p.baseY - p.y) * 0.05;
             }
-        }
-    } else {
-       
-        for (let p of particles) {
+        } else {
+            // Luôn đảm bảo hạt trở về vị trí ban đầu khi không có tương tác
             p.x += (p.baseX - p.x) * 0.05;
             p.y += (p.baseY - p.y) * 0.05;
         }
@@ -149,6 +147,7 @@ window.addEventListener("resize", () => {
     createParticles();
 });
 
+// ===================== ẢNH TRÁI TIM =====================
 const container = document.getElementById("imageContainer");
 const imageHeartPoints = [];
 
@@ -156,8 +155,8 @@ for (let i = 0; i < Math.PI * 2; i += (2 * Math.PI) / imageUrls.length) {
     imageHeartPoints.push(heartFunction(i));
 }
 
-// Giảm tỷ lệ scale để ảnh không bị che trên mobile
-const imageScale = window.innerWidth > 600 ? 15 : 10; 
+// Tối ưu hóa: Giảm tỷ lệ scale ảnh để tránh bị che khuất trên mobile
+const imageScale = window.innerWidth > 600 ? 15 : 8; 
 
 imageUrls.forEach((url, i) => {
     const img = document.createElement("img");
@@ -175,7 +174,7 @@ imageUrls.forEach((url, i) => {
     img.animate(
         [
             { transform: `translate(-50%, -50%) translateY(0px)` },
-            { transform: `translate(-50%, -50%) translateY(-5px)` }, // Giảm dịch chuyển
+            { transform: `translate(-50%, -50%) translateY(-5px)` }, 
             { transform: `translate(-50%, -50%) translateY(0px)` }
         ],
         {
@@ -188,22 +187,24 @@ imageUrls.forEach((url, i) => {
     container.appendChild(img);
 });
 
+// ===================== PHÁT NHẠC TỰ ĐỘNG SAU KHI TƯƠNG TÁC =====================
 const audio = document.getElementById("myAudio");
 let musicPlayed = false;
 
 function playMusic() {
     if (!musicPlayed) {
         audio.play().catch(error => {
-            
-            console.error("Lỗi phát nhạc: ", error);
+             // Xử lý lỗi nếu trình duyệt vẫn chặn, nhưng thường sẽ hoạt động
+             // sau khi người dùng tương tác lần đầu tiên.
+             console.error("Lỗi phát nhạc, có thể do trình duyệt chặn: ", error);
         });
         musicPlayed = true;
+        // Bỏ các lắng nghe sau khi nhạc đã được kích hoạt
+        window.removeEventListener("click", playMusic);
+        window.removeEventListener("touchstart", playMusic);
     }
 }
 
+// Kích hoạt nhạc tự động chạy ngay sau click/touch đầu tiên của người dùng
 window.addEventListener("click", playMusic, { once: true });
 window.addEventListener("touchstart", playMusic, { once: true });
-
-    container.appendChild(img);
-});
-
