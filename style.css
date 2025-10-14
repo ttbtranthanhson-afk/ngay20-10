@@ -23,7 +23,7 @@ body {
 
 #imageContainer img {
     position: absolute;
-    width: 60px; /* Giảm kích thước ảnh mặc định */
+    width: 60px; 
     height: 60px;
     border-radius: 16px;
     object-fit: cover;
@@ -41,7 +41,7 @@ body {
     top: 50%;
     left: 50%;
     width: 450px; 
-    max-width: 90%; /* Đảm bảo không tràn màn hình */
+    max-width: 90%; 
     padding: 15px; 
     box-sizing: border-box; 
     text-align: center;
@@ -61,6 +61,16 @@ body {
     line-height: 1.6;
 }
 
+/* Định vị nút audio ở góc dưới bên trái */
+#myAudio {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    width: 250px; /* Kích thước trên desktop */
+    z-index: 10;
+    opacity: 0.8;
+}
+
 /* Tối ưu hóa cho thiết bị di động (màn hình nhỏ hơn 600px) */
 @media (max-width: 600px) {
     #messageBox {
@@ -77,7 +87,11 @@ body {
     }
     
     #imageContainer img {
-        width: 50px; /* Kích thước ảnh nhỏ hơn trên mobile */
+        width: 50px; 
         height: 50px;
+    }
+    
+    #myAudio {
+        width: 150px; /* Giảm kích thước trên mobile */
     }
 }
