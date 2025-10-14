@@ -136,3 +136,24 @@ playBtn.addEventListener("click", () => {
   music.play();
   playBtn.style.display = "none";
 });
+// --- Thêm đoạn này vào cuối script.js ---
+
+// Danh sách lời chúc của bạn
+const customGreetings = [
+  "Chúc bạn luôn xinh đẹp, tự tin và rạng rỡ như những bông hoa ngày 20/10.<br> Mong rằng mỗi ngày của bạn đều ngập tràn niềm vui, tiếng cười và yêu thương.<br> Cảm ơn bạn vì đã luôn mang đến năng lượng tích cực cho mọi người xung quanh!",
+  "Nhân ngày Phụ nữ Việt Nam, chúc bạn luôn hạnh phúc và gặp nhiều điều tốt đẹp trong cuộc sống.<br> Mỗi bước đi đều là một hành trình tỏa sáng, mỗi nụ cười đều là niềm vui lan tỏa.<br> Hãy luôn là chính mình – mạnh mẽ, dịu dàng và đầy cuốn hút!",
+  "Chúc bạn có một ngày 20/10 thật ý nghĩa, được yêu thương và trân trọng hết mình.<br> Hy vọng mọi ước mơ của bạn đều sớm trở thành hiện thực.<br> Cảm ơn bạn vì đã khiến thế giới này trở nên tươi đẹp hơn chỉ bằng sự hiện diện của bạn!"
+];
+
+let greetingIndex = 0;
+const GREETING = document.getElementById('greetingBox');
+
+// Gán lời chúc đầu tiên
+GREETING.innerHTML = customGreetings[greetingIndex];
+
+// Đổi lời chúc mỗi 30 giây
+setInterval(() => {
+  greetingIndex = (greetingIndex + 1) % customGreetings.length;
+  GREETING.innerHTML = customGreetings[greetingIndex];
+}, 30000);
+
