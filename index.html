@@ -7,15 +7,24 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <audio autoplay loop>
-    <source src="music.mp3" type="audio/mpeg">
-  </audio>
+  <canvas id="heartCanvas"></canvas>
+  <div id="imageContainer"></div>
 
-  <div id="stage">
-    <div id="greetingBox" class="greeting"></div>
-    <div id="sparkleContainer"></div>
-    <div id="heartContainer"></div>
+  <div id="messageBox">
+    <h1>Chúc mừng ngày Phụ Nữ Việt Nam 20/10 💐</h1>
+    <p>
+      Nhân ngày đặc biệt này, xin gửi những lời chúc tốt đẹp nhất đến tất cả
+      những người phụ nữ – những bông hoa tuyệt vời nhất của cuộc đời.
+      Chúc bạn luôn xinh đẹp, mạnh mẽ, hạnh phúc và luôn được yêu thương như
+      cách bạn xứng đáng. 💖
+    </p>
   </div>
+
+  <!-- Bật nhạc bằng chạm -->
+  <button id="playBtn">🎵 Phát nhạc</button>
+  <audio id="bgMusic" loop>
+    <source src="sounds/Pond.mp3" type="audio/mpeg">
+  </audio>
 
   <script src="script.js"></script>
 </body>
