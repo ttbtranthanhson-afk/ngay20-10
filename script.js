@@ -51,7 +51,7 @@ function createParticles() {
     const centerX = box.left + box.width / 2;
     const centerY = box.top + box.height / 2;
     
-    // Tối ưu hóa: Giảm tỷ lệ scale trên di động để trái tim không quá lớn
+    // Tỷ lệ trái tim hạt (giữ nguyên tối ưu mobile)
     const scaleFactor = window.innerWidth > 600 ? 0.6 : 0.35; 
     const scale = Math.min(window.innerWidth, window.innerHeight) * scaleFactor;
 
@@ -99,11 +99,10 @@ window.addEventListener("touchmove", (e) => {
     const touch = e.touches[0];
     pointer.x = touch.clientX;
     pointer.y = touch.clientY;
-    e.preventDefault(); // Ngăn chặn cuộn trang khi di ngón tay
+    e.preventDefault(); 
 });
 
 window.addEventListener("touchend", () => {
-    // Đặt vị trí xa để hạt trở về ban đầu khi nhấc ngón tay
     pointer.x = undefined; 
     pointer.y = undefined;
 });
@@ -155,8 +154,8 @@ for (let i = 0; i < Math.PI * 2; i += (2 * Math.PI) / imageUrls.length) {
     imageHeartPoints.push(heartFunction(i));
 }
 
-// Tối ưu hóa: Giảm tỷ lệ scale ảnh để tránh bị che khuất trên mobile
-const imageScale = window.innerWidth > 600 ? 15 : 8; 
+// Tăng tỷ lệ scale để ảnh cách xa lời chúc hơn
+const imageScale = window.innerWidth > 600 ? 18 : 12; // Tăng từ 15 -> 18 và 8 -> 12
 
 imageUrls.forEach((url, i) => {
     const img = document.createElement("img");
@@ -187,24 +186,4 @@ imageUrls.forEach((url, i) => {
     container.appendChild(img);
 });
 
-// ===================== PHÁT NHẠC TỰ ĐỘNG SAU KHI TƯƠNG TÁC =====================
-const audio = document.getElementById("myAudio");
-let musicPlayed = false;
-
-function playMusic() {
-    if (!musicPlayed) {
-        audio.play().catch(error => {
-             // Xử lý lỗi nếu trình duyệt vẫn chặn, nhưng thường sẽ hoạt động
-             // sau khi người dùng tương tác lần đầu tiên.
-             console.error("Lỗi phát nhạc, có thể do trình duyệt chặn: ", error);
-        });
-        musicPlayed = true;
-        // Bỏ các lắng nghe sau khi nhạc đã được kích hoạt
-        window.removeEventListener("click", playMusic);
-        window.removeEventListener("touchstart", playMusic);
-    }
-}
-
-// Kích hoạt nhạc tự động chạy ngay sau click/touch đầu tiên của người dùng
-window.addEventListener("click", playMusic, { once: true });
-window.addEventListener("touchstart", playMusic, { once: true });
+// Đã loại bỏ phần JavaScript xử lý phát nhạc tự động
