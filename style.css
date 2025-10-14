@@ -23,7 +23,7 @@ body {
 
 #imageContainer img {
     position: absolute;
-    width: 60px; /* Giảm kích thước ảnh */
+    width: 60px; /* Giảm kích thước ảnh mặc định */
     height: 60px;
     border-radius: 16px;
     object-fit: cover;
@@ -41,7 +41,7 @@ body {
     top: 50%;
     left: 50%;
     width: 450px; 
-    max-width: 90%; 
+    max-width: 90%; /* Đảm bảo không tràn màn hình */
     padding: 15px; 
     box-sizing: border-box; 
     text-align: center;
@@ -61,23 +61,23 @@ body {
     line-height: 1.6;
 }
 
-/* Tối ưu hóa cho thiết bị di động */
+/* Tối ưu hóa cho thiết bị di động (màn hình nhỏ hơn 600px) */
 @media (max-width: 600px) {
     #messageBox {
         width: 90%; 
-        padding: 10px; /* Giảm padding */
+        padding: 10px;
     }
 
     #messageBox h1 {
-        font-size: 20px; /* Giảm kích thước tiêu đề */
+        font-size: 20px; 
     }
 
     #messageBox p {
-        font-size: 13px; /* Giảm kích thước đoạn văn */
+        font-size: 13px; 
     }
     
     #imageContainer img {
-        width: 50px; /* Giảm thêm kích thước ảnh */
+        width: 50px; /* Kích thước ảnh nhỏ hơn trên mobile */
         height: 50px;
     }
 }
