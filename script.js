@@ -25,7 +25,6 @@ const imageUrls = [
     "BichNgoc.jpg"
 ];
 
-// ===================== HIỆU ỨNG HẠT TRÁI TIM =====================
 const canvas = document.getElementById("heartCanvas");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -41,7 +40,6 @@ function heartFunction(t) {
     return { x, y };
 }
 
-// Nhiều hạt hơn
 for (let i = 0; i < Math.PI * 2; i += 0.01) {
     heartPoints.push(heartFunction(i));
 }
@@ -51,8 +49,10 @@ function createParticles() {
     const box = document.getElementById("messageBox").getBoundingClientRect();
     const centerX = box.left + box.width / 2;
     const centerY = box.top + box.height / 2;
-    // Giảm tỷ lệ scale trên di động để trái tim không quá lớn
-    const scale = Math.min(window.innerWidth, window.innerHeight) * 0.55; 
+    
+    // Giảm tỷ lệ scale trên di động để trái tim không quá lớn và bị che
+    const scaleFactor = window.innerWidth > 600 ? 0.6 : 0.45; 
+    const scale = Math.min(window.innerWidth, window.innerHeight) * scaleFactor;
 
     for (let i = 0; i < heartPoints.length; i++) {
         const p = heartPoints[i];
@@ -79,26 +79,63 @@ function drawParticles() {
     }
 }
 
-const mouse = { x: undefined, y: undefined, radius: 90 };
+// Thay đổi mouse object thành một vị trí ảo để xử lý cả chuột và chạm
+const pointer = { x: undefined, y: undefined, radius: 90 };
+
 window.addEventListener("mousemove", (e) => {
-    mouse.x = e.x;
-    mouse.y = e.y;
+    pointer.x = e.x;
+    pointer.y = e.y;
+});
+
+// Xử lý chạm (touch) trên thiết bị di động
+window.addEventListener("touchstart", (e) => {
+    const touch = e.touches[0];
+    pointer.x = touch.clientX;
+    pointer.y = touch.clientY;
+    
+    // Bắt đầu phát nhạc khi có tương tác (chạm đầu tiên)
+    playMusic(); 
+});
+
+window.addEventListener("touchmove", (e) => {
+    const touch = e.touches[0];
+    pointer.x = touch.clientX;
+    pointer.y = touch.clientY;
+    e.preventDefault(); // Ngăn chặn cuộn trang khi di ngón tay
+});
+
+window.addEventListener("touchend", () => {
+    // Khi ngón tay nhấc lên, đặt vị trí xa để hạt trở về ban đầu
+    pointer.x = undefined;
+    pointer.y = undefined;
 });
 
 function animateParticles() {
-    for (let p of particles) {
-        const dx = mouse.x - p.x;
-        const dy = mouse.y - p.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < mouse.radius) {
-            p.x -= dx / 10;
-            p.y -= dy / 10;
-        } else {
+    // Nếu không có tương tác, dùng vị trí undefined
+    if (pointer.x !== undefined) {
+        for (let p of particles) {
+            const dx = pointer.x - p.x;
+            const dy = pointer.y - p.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+    
+            if (distance < pointer.radius) {
+                // Đẩy hạt ra xa
+                p.x -= dx / 10;
+                p.y -= dy / 10;
+            } else {
+                // Hạt trở về vị trí ban đầu
+                p.x += (p.baseX - p.x) * 0.05;
+                p.y += (p.baseY - p.y) * 0.05;
+            }
+        }
+    } else {
+       
+        for (let p of particles) {
             p.x += (p.baseX - p.x) * 0.05;
             p.y += (p.baseY - p.y) * 0.05;
         }
     }
+
     drawParticles();
     requestAnimationFrame(animateParticles);
 }
@@ -112,7 +149,6 @@ window.addEventListener("resize", () => {
     createParticles();
 });
 
-// ===================== ẢNH TRÁI TIM =====================
 const container = document.getElementById("imageContainer");
 const imageHeartPoints = [];
 
@@ -120,7 +156,9 @@ for (let i = 0; i < Math.PI * 2; i += (2 * Math.PI) / imageUrls.length) {
     imageHeartPoints.push(heartFunction(i));
 }
 
-const imageScale = 15; // Đã giảm từ 20 xuống 15 để ảnh gần tâm hơn, tối ưu cho mobile
+// Giảm tỷ lệ scale để ảnh không bị che trên mobile
+const imageScale = window.innerWidth > 600 ? 15 : 10; 
+
 imageUrls.forEach((url, i) => {
     const img = document.createElement("img");
     img.src = url;
@@ -137,7 +175,7 @@ imageUrls.forEach((url, i) => {
     img.animate(
         [
             { transform: `translate(-50%, -50%) translateY(0px)` },
-            { transform: `translate(-50%, -50%) translateY(-10px)` },
+            { transform: `translate(-50%, -50%) translateY(-5px)` }, // Giảm dịch chuyển
             { transform: `translate(-50%, -50%) translateY(0px)` }
         ],
         {
@@ -149,3 +187,23 @@ imageUrls.forEach((url, i) => {
 
     container.appendChild(img);
 });
+
+const audio = document.getElementById("myAudio");
+let musicPlayed = false;
+
+function playMusic() {
+    if (!musicPlayed) {
+        audio.play().catch(error => {
+            
+            console.error("Lỗi phát nhạc: ", error);
+        });
+        musicPlayed = true;
+    }
+}
+
+window.addEventListener("click", playMusic, { once: true });
+window.addEventListener("touchstart", playMusic, { once: true });
+
+    container.appendChild(img);
+});
+
