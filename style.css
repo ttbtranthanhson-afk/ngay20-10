@@ -1,101 +1,69 @@
 body {
   margin: 0;
+  background-color: #000;
   overflow: hidden;
-  background: radial-gradient(circle at center, #ffe6f2 0%, #ffb3d9 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
+  color: #fff;
+  text-align: center;
+  font-family: "Segoe UI", sans-serif;
 }
 
-/* Canvas nền trái tim */
-#heartCanvas {
-  position: fixed;
+#greetingBox {
+  position: absolute;
+  z-index: 10;
+  max-width: 90%;
+  padding: 20px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(8px);
+  font-size: 1.2rem;
+  line-height: 1.6;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+#stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+#sparkleContainer, #heartContainer {
+  position: absolute;
   top: 0;
   left: 0;
-  z-index: 1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
-/* Container chứa ảnh */
-#imageContainer {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-}
-
-#imageContainer img {
+img.sparkle {
   position: absolute;
   width: 70px;
   height: 70px;
   border-radius: 12px;
   object-fit: cover;
-  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 0 10px rgba(255,255,255,0.7);
+  animation: float 8s infinite ease-in-out;
 }
 
-#imageContainer img:hover {
-  transform: scale(1.3);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
-  z-index: 3;
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
 }
 
-/* Lời chúc */
-#messageBox {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 85%;
-  max-width: 450px;
-  text-align: center;
-  transform: translate(-50%, -50%);
-  color: #fff;
-  text-shadow: 0 0 10px #ff66b2;
-  z-index: 4;
-}
-
-#messageBox h1 {
-  font-size: 6vw;
-  margin-bottom: 10px;
-}
-
-#messageBox p {
-  font-size: 4vw;
-  line-height: 1.6;
-}
-
-/* Nút bật nhạc */
-#playBtn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background-color: #ff66b2;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-  z-index: 5;
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
-  transition: transform 0.3s;
-}
-
-#playBtn:active {
-  transform: scale(0.9);
-}
-
-/* Màn hình nhỏ hơn 600px */
-@media (max-width: 600px) {
-  #imageContainer img {
-    width: 50px;
-    height: 50px;
+/* Responsive fix cho điện thoại */
+@media (max-width: 768px) {
+  #greetingBox {
+    font-size: 1rem;
+    padding: 15px;
   }
-
-  #messageBox h1 {
-    font-size: 5vw;
-  }
-
-  #messageBox p {
-    font-size: 3.6vw;
+  img.sparkle {
+    width: 60px;
+    height: 60px;
   }
 }
+
+
