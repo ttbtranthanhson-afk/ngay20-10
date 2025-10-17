@@ -25,7 +25,7 @@ const imageUrls = [
     "BichNgoc.jpg"
 ];
 
-// ===================== HIỆU ỨNG HẠT TRÁI TIM =====================
+// Hạt trái tim
 const canvas = document.getElementById("heartCanvas");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -146,7 +146,7 @@ window.addEventListener("resize", () => {
     createParticles();
 });
 
-// ===================== ẢNH TRÁI TIM =====================
+// Ảnh trái tim
 const container = document.getElementById("imageContainer");
 const imageHeartPoints = [];
 
@@ -186,4 +186,5 @@ imageUrls.forEach((url, i) => {
     container.appendChild(img);
 });
 
-// Đã loại bỏ phần JavaScript xử lý phát nhạc tự động
+
+
