@@ -6,6 +6,43 @@ body {
     font-family: 'Segoe UI', sans-serif;
 }
 
+/* --- Lớp trái tim rơi chậm --- */
+#fallingHearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.heart {
+    position: absolute;
+    color: rgba(255, 100, 150, 0.3);
+    font-size: 16px;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-10vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Canvas hạt trái tim */
 #heartCanvas {
     position: fixed;
     top: 0;
@@ -13,6 +50,7 @@ body {
     z-index: 1;
 }
 
+/* Ảnh xếp thành hình trái tim */
 #imageContainer {
     position: absolute;
     top: 50%;
@@ -23,27 +61,21 @@ body {
 
 #imageContainer img {
     position: absolute;
-    width: 60px; 
+    width: 60px;
     height: 60px;
     border-radius: 16px;
     object-fit: cover;
-    transition: transform 0.3s, box-shadow 0.3s;
+    transition: transform 0.6s ease, box-shadow 0.6s ease, filter 0.6s ease, z-index 0.6s ease;
 }
 
-#imageContainer img:hover {
-    transform: scale(1.3);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
-    z-index: 3;
-}
-
+/* Lời chúc */
 #messageBox {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 450px; 
-    max-width: 90%; 
-    padding: 15px; 
-    box-sizing: border-box; 
+    width: 450px;
+    max-width: 90%;
+    padding: 15px;
     text-align: center;
     transform: translate(-50%, -50%);
     color: #fff;
@@ -61,37 +93,38 @@ body {
     line-height: 1.6;
 }
 
-/* Định vị nút audio ở góc dưới bên trái */
+/* Audio player */
 #myAudio {
     position: fixed;
     bottom: 10px;
     left: 10px;
-    width: 250px; /* Kích thước trên desktop */
+    width: 250px;
     z-index: 10;
     opacity: 0.8;
 }
 
-/* Tối ưu hóa cho thiết bị di động (màn hình nhỏ hơn 600px) */
+/* Giao diện mobile */
 @media (max-width: 600px) {
     #messageBox {
-        width: 90%; 
+        width: 90%;
         padding: 10px;
     }
 
     #messageBox h1 {
-        font-size: 20px; 
+        font-size: 20px;
     }
 
     #messageBox p {
-        font-size: 13px; 
+        font-size: 13px;
     }
-    
+
     #imageContainer img {
-        width: 50px; 
+        width: 50px;
         height: 50px;
     }
-    
+
     #myAudio {
-        width: 150px; /* Giảm kích thước trên mobile */
+        width: 150px;
     }
 }
+
