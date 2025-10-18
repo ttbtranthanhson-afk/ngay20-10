@@ -108,7 +108,7 @@ body {
 /* Giao diện mobile */
 @media (max-width: 600px) {
     #messageBox {
-        width: 90%;
+        width: 85%;
         padding: 10px;
     }
 
@@ -123,13 +123,14 @@ body {
     }
 
     #imageContainer img {
-        width: 45px;
-        height: 45px;
+        width: 50px;
+        height: 50px;
     }
 
     #myAudio {
         width: 150px;
     }
 }
+
 
 
