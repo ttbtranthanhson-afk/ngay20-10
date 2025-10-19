@@ -14,32 +14,21 @@
             left: 50%;
             transform: translate(-50%, -50%);
             cursor: pointer;
-            width: 300px;
+            width: 300px; /* Kích thước mặc định */
             height: 300px;
-            z-index: 100; /* Đảm bảo hoa nằm trên các lớp khác */
+            z-index: 100;
         }
 
-            #rose-t svg {
-                overflow: visible;
-            }
+        #rose-t svg {
+            overflow: visible;
+        }
 
         /* Định nghĩa màu tô cho các path mặc định (sẽ được áp dụng sau animation) */
-        .leafOne, .leafTwo, .leafS1 {
-            fill: #9CDD05;
-        }
-
-        .stickLine {
-            fill: #83AA2E;
-        }
-
-        .rose1, .rose3 {
-            fill: #F37D79;
-        }
-
-        .rose2, .rose4 {
-            fill: #D86666;
-        }
-
+        .leafOne, .leafTwo, .leafS1 { fill: #9CDD05; }
+        .stickLine { fill: #83AA2E; }
+        .rose1, .rose3 { fill: #F37D79; }
+        .rose2, .rose4 { fill: #D86666; }
+        
         /* Đảm bảo các path bắt đầu với stroke và không có fill */
         .leafOne, .stickLine, .leafTwo, .leafS1, .rose1, .rose2, .rose3, .rose4 {
             fill: none;
@@ -69,7 +58,7 @@
             height: 100%;
             top: 0;
             left: 0;
-            z-index: -1; /* Đặt dưới hoa */
+            z-index: -1;
         }
 
         /* Điều chỉnh ảnh để ẩn ban đầu */
@@ -90,8 +79,7 @@
 
         /* Ẩn trình phát nhạc */
         #myAudio {
-            display: none;
-            /* hoặc: visibility: hidden; opacity: 0; */
+            display: none; 
         }
     </style>
 </head>
@@ -111,7 +99,7 @@
         <p id="text-click">Click me now !</p>
         <div id="magic-dust-container"></div>
     </div>
-
+    
     <div id="main-content">
         <div id="fallingHearts"></div>
         <canvas id="heartCanvas"></canvas>
@@ -119,14 +107,14 @@
         <div id="messageBox">
             <h1>Chúc mừng ngày Phụ Nữ Việt Nam 20/10 💐</h1>
             <p>
-                Nhân ngày đặc biệt này, xin gửi những lời chúc tốt đẹp nhất đến tất cả
-                những người phụ nữ – những bông hoa tuyệt vời nhất của cuộc đời.
-                Chúc bạn luôn xinh đẹp, mạnh mẽ, hạnh phúc và luôn được yêu thương như
-                cách bạn xứng đáng. Cảm ơn vì đã luôn mang đến niềm vui, nụ cười và ánh sáng cho thế giới này! 💖
+                Nhân ngày 20/10, chúc các bạn nữ lớp 10A4 luôn xinh đẹp, 
+                tự tin và tỏa sáng như những bông hoa rực rỡ nhất. 
+                Mong rằng mỗi ngày đến trường đều là một ngày vui, 
+                đầy tiếng cười và kỷ niệm thật đẹp bên bạn bè! 🌸💖
             </p>
         </div>
     </div>
-
+    
     <audio id="myAudio" loop>
         <source src="Pond.mp3" type="audio/mpeg">
     </audio>
