@@ -104,6 +104,16 @@ roseT.addEventListener('click', function() {
     anime.remove(rosePaths);
     anime.remove(textClick);
     
+    const rect = roseT.getBoundingClientRect();
+    
+    // Chuyển position từ fixed sang absolute và đặt vị trí bằng pixel
+    // Việc này loại bỏ cơ chế căn giữa tự động CSS cũ
+    roseT.style.position = 'absolute';
+    roseT.style.top = `${rect.top}px`;
+    roseT.style.left = `${rect.left}px`;
+    roseT.style.transform = 'none'; // RẤT QUAN TRỌNG: Loại bỏ transform: translate(-50%, -50%)
+    
+    // 2. Chạy animation thu nhỏ tại vị trí đã khóa
     anime({
         targets: '#rose-t',
         scale: 0, 
@@ -111,11 +121,11 @@ roseT.addEventListener('click', function() {
         duration: 1200, 
         easing: 'easeInBack', 
         complete: function() {
+            // Logic chuyển cảnh sang Giai đoạn 2
             roseT.style.display = 'none'; 
             document.getElementById('main-content').style.zIndex = 1;
             document.getElementById('main-content').style.opacity = 1;
             
-            // Bắt đầu phát nhạc ngay lập tức
             myAudio.play().catch(e => console.error("Lỗi: Không thể phát âm thanh tự động. Vui lòng tương tác lần đầu để trình duyệt cho phép."));
 
             start2010Effects();
@@ -357,6 +367,7 @@ function createFallingHeart() {
     heartContainer.appendChild(heart);
     setTimeout(() => heart.remove(), 8000);
 }
+
 
 
 
