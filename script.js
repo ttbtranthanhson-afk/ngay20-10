@@ -4,9 +4,8 @@
 
 const roseT = document.getElementById('rose-t');
 const textClick = document.getElementById('text-click');
-const myAudio = document.getElementById('myAudio'); // Lấy element audio
+const myAudio = document.getElementById('myAudio'); 
 
-// Lấy các phần tử SVG
 const rosePaths = document.querySelectorAll('#rose-t svg path');
 var leafOne = document.querySelector('.leafOne');
 var stickLine = document.querySelector('.stickLine');
@@ -55,13 +54,12 @@ var lineDrawing = anime({
             delay: 500
         });
 
-        // Bắt đầu magic dust
         startMagicDust();
     },
     autoplay: true,
 });
 
-// Logic Magic Dust (giữ nguyên, đảm bảo nó thêm vào rose-t)
+// Logic Magic Dust (giữ nguyên)
 const head = document.getElementsByTagName('head')[0];
 let animationId = 1;
 
@@ -100,34 +98,33 @@ function startMagicDust() {
 // ==================== GIAI ĐOẠN 2: CHUYỂN CẢNH VÀ HIỆU ỨNG 20/10 ==================
 // ===================================================================================
 
+let isParticlesReady = false; 
+
 roseT.addEventListener('click', function() {
-    // Ngừng tất cả các animation trên bông hoa và textClick
     anime.remove(rosePaths);
     anime.remove(textClick);
     
-    // Thu nhỏ và làm mờ bông hoa, sau đó biến mất
     anime({
         targets: '#rose-t',
-        scale: 0, // Thu nhỏ về 0
+        scale: 0, 
         opacity: 0,
-        duration: 1200, // Thời gian biến mất
-        easing: 'easeInBack', // Hiệu ứng thu nhỏ nhanh dần
+        duration: 1200, 
+        easing: 'easeInBack', 
         complete: function() {
-            roseT.style.display = 'none'; // Ẩn hoàn toàn sau khi biến mất
+            roseT.style.display = 'none'; 
             document.getElementById('main-content').style.zIndex = 1;
             document.getElementById('main-content').style.opacity = 1;
             
             // Bắt đầu phát nhạc ngay lập tức
-            myAudio.play().catch(e => console.log("Lỗi: Không thể phát âm thanh tự động. Người dùng cần tương tác lần đầu."));
+            myAudio.play().catch(e => console.error("Lỗi: Không thể phát âm thanh tự động. Vui lòng tương tác lần đầu để trình duyệt cho phép."));
 
-            // Bắt đầu hiệu ứng 20/10
             start2010Effects();
         }
     });
 });
 
 
-// ==================== HẠT TRÁI TIM (CHỈNH SỬA) ====================
+// ==================== HẠT TRÁI TIM (Responsive Fix) ====================
 let particles = [];
 const heartPoints = [];
 const canvas = document.getElementById("heartCanvas");
@@ -141,25 +138,37 @@ function heartFunction(t) {
 
 for (let i = 0; i < Math.PI * 2; i += 0.01) heartPoints.push(heartFunction(i));
 
-function createParticles() {
+function createParticles(instant = false) { 
     particles = [];
+    canvas.width = window.innerWidth; 
+    canvas.height = window.innerHeight;
+
     const box = document.getElementById("messageBox").getBoundingClientRect();
     const centerX = box.left + box.width / 2;
     const centerY = box.top + box.height / 2;
-    const scaleFactor = window.innerWidth > 600 ? 0.6 : 0.35;
-    const scale = Math.min(window.innerWidth, window.innerHeight) * scaleFactor;
+    
+    // Tối ưu hóa: Thay đổi scaleFactor dựa trên kích thước màn hình
+    let scaleFactor = 0.55; 
+    if (window.innerWidth <= 600) {
+        scaleFactor = 0.45; // Nhỏ hơn cho điện thoại
+    }
+    
+    const scale = Math.min(window.innerWidth, window.innerHeight) * scaleFactor; 
 
     for (let i = 0; i < heartPoints.length; i++) {
         const p = heartPoints[i];
-        const finalX = centerX + p.x * (scale / 16);
-        const finalY = centerY - p.y * (scale / 16);
+        const finalX = centerX + p.x * (scale / 16); 
+        const finalY = centerY - p.y * (scale / 16); 
+        
+        let startX = instant ? finalX : centerX; 
+        let startY = instant ? finalY : centerY; 
+
         particles.push({
-            // Bắt đầu từ tâm của messageBox
-            x: centerX, y: centerY, 
-            baseX: finalX, baseY: finalY, // Vị trí cuối cùng
+            x: startX, y: startY, 
+            baseX: finalX, baseY: finalY,
             size: Math.random() * 3 + 0.8,
             color: `rgba(255,${120 + Math.random() * 100},${150 + Math.random() * 105},0.9)`,
-            delay: i * 3 // Mỗi chấm xuất hiện sau 3ms
+            delay: i * 3
         });
     }
 }
@@ -183,7 +192,9 @@ window.addEventListener("touchmove", e => {
 window.addEventListener("touchend", () => { pointer.x = undefined; pointer.y = undefined; });
 
 function animateParticles() {
-    const hasPointer = pointer.x !== undefined && pointer.y !== undefined;
+    // Chỉ kích hoạt tương tác khi isParticlesReady là true
+    const hasPointer = isParticlesReady && pointer.x !== undefined && pointer.y !== undefined;
+
     for (let p of particles) {
         if (hasPointer) {
             const dx = pointer.x - p.x, dy = pointer.y - p.y;
@@ -191,12 +202,10 @@ function animateParticles() {
             if (dist < pointer.radius) {
                 p.x -= dx / 10; p.y -= dy / 10;
             } else {
-                // Di chuyển chậm về vị trí cuối
                 p.x += (p.baseX - p.x) * 0.05;
                 p.y += (p.baseY - p.y) * 0.05;
             }
         } else {
-            // Di chuyển chậm về vị trí cuối
             p.x += (p.baseX - p.x) * 0.05;
             p.y += (p.baseY - p.y) * 0.05;
         }
@@ -205,10 +214,10 @@ function animateParticles() {
     requestAnimationFrame(animateParticles);
 }
 
-// Hàm mới để xử lý hiệu ứng hạt xuất hiện dần dần
 function animateParticleMotion() {
-    // Đảm bảo particles đã được tạo trước khi animate
     if (particles.length === 0) createParticles(); 
+
+    const lastParticle = particles[particles.length - 1];
 
     particles.forEach(p => {
         anime({
@@ -216,15 +225,19 @@ function animateParticleMotion() {
             x: p.baseX,
             y: p.baseY,
             delay: p.delay,
-            duration: 1500, // Thời gian di chuyển
-            easing: 'easeOutQuart'
+            duration: 1500,
+            easing: 'easeOutQuart',
+            complete: function() {
+                if (p === lastParticle && !isParticlesReady) { 
+                    isParticlesReady = true; 
+                }
+            }
         });
     });
-    // Bắt đầu vòng lặp vẽ và tương tác sau khi đã khởi tạo vị trí base
     animateParticles(); 
 }
 
-// ==================== ẢNH LUÂN PHIÊN NỔI BẬT (CHỈNH SỬA) ====================
+// ==================== ẢNH LUÂN PHIÊN NỔI BẬT (Responsive) ====================
 const container = document.getElementById("imageContainer");
 const imageUrls = [
     "YenNhi.jpg", "VietHa.jpg", "VanKhanh.jpg", "TuAnh.jpg", "TueBinh.jpg",
@@ -236,10 +249,15 @@ const imageUrls = [
 const imageHeartPoints = [];
 for (let i = 0; i < Math.PI * 2; i += (2 * Math.PI) / imageUrls.length) imageHeartPoints.push(heartFunction(i));
 
-const imageScale = window.innerWidth > 600 ? 18 : 12;
 const imgElements = [];
 
 function setupImages() {
+    // Tối ưu hóa: Tính toán imageScale ngay tại thời điểm setup
+    const imageScale = window.innerWidth > 600 ? 18 : 12; 
+    
+    container.innerHTML = '';
+    imgElements.length = 0;
+
     imageUrls.forEach((url, i) => {
         const img = document.createElement("img");
         img.src = url;
@@ -250,22 +268,19 @@ function setupImages() {
 
         img.style.left = `${x}px`;
         img.style.top = `${y}px`;
-        // img.style.opacity và transform đã được định nghĩa trong CSS ban đầu là scale(0.1)
         
         container.appendChild(img);
         imgElements.push(img);
         
-        // Hiệu ứng xuất hiện từ từ (scale từ 0.1 lên 1 và fade in)
         anime({
             targets: img,
             opacity: 1,
             scale: 1,
-            delay: 1000 + i * 100, // Ảnh xuất hiện lần lượt
+            delay: 1000 + i * 100, 
             duration: 800,
             easing: 'easeOutBack'
         });
         
-        // Bổ sung animation dao động
         img.animate([
             { transform: `translate(-50%, -50%) scale(1) translateY(0px)` },
             { transform: `translate(-50%, -50%) scale(1) translateY(-5px)` },
@@ -280,7 +295,6 @@ function setupImages() {
 
 let currentIndex = 0;
 function highlightNextImage() {
-    // Chỉ highlight nếu có ảnh
     if (imgElements.length === 0) return;
 
     const currentImg = imgElements[currentIndex];
@@ -302,31 +316,33 @@ function highlightNextImage() {
 // ==================== KHỞI CHẠY CHÍNH CỦA HIỆU ỨNG 20/10 ====================
 
 function start2010Effects() {
-    // 1. Setup ảnh và hiệu ứng xuất hiện từ từ
     setupImages();
-    // 2. Bắt đầu highlight sau khi tất cả ảnh đã xuất hiện
     setTimeout(highlightNextImage, 1000 + imageUrls.length * 100 + 500);
 
-    // 3. Tạo hạt trái tim và bắt đầu hiệu ứng di chuyển từ trung tâm
     createParticles();
     animateParticleMotion();
 
-    // 4. Bắt đầu hiệu ứng trái tim rơi chậm
     setInterval(createFallingHeart, 200);
 }
 
-// Bắt đầu các sự kiện liên quan đến resize
+// Bắt đầu các sự kiện liên quan đến resize 
 window.addEventListener("resize", () => {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    // Khởi tạo lại hạt (nếu đã ở Giai đoạn 2)
     if (document.getElementById('main-content').style.opacity == 1) {
-        createParticles();
-        animateParticleMotion();
+        // Fix: Dừng animation và đặt lại vị trí tức thời khi resize
+        anime.remove(particles);
+        
+        // Tạo lại hạt và đặt chúng NGAY LẬP TỨC vào vị trí cuối cùng mới (true = instant)
+        createParticles(true); 
+        
+        // Cần setupImages lại để hình ảnh xếp đúng vị trí mới
+        setupImages();
+
+        // Tiếp tục vòng lặp vẽ/tương tác
+        animateParticles(); 
     }
 });
 
-// ==================== TRÁI TIM RƠI (GIỮ NGUYÊN) ====================
+// ==================== TRÁI TIM RƠI ====================
 const heartContainer = document.getElementById("fallingHearts");
 function createFallingHeart() {
     const heart = document.createElement("div");
@@ -341,4 +357,3 @@ function createFallingHeart() {
     heartContainer.appendChild(heart);
     setTimeout(() => heart.remove(), 8000);
 }
-// KHÔNG CHẠY setInterval ở đây, nó sẽ được gọi trong start2010Effects()
