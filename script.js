@@ -194,11 +194,6 @@ function drawParticles() {
 }
 
 const pointer = { x: undefined, y: undefined, radius: 90 };
-window.addEventListener("mousemove", e => { pointer.x = e.x; pointer.y = e.y; });
-window.addEventListener("touchmove", e => {
-    const t = e.touches[0];
-    pointer.x = t.clientX; pointer.y = t.clientY; e.preventDefault();
-});
 window.addEventListener("touchend", () => { pointer.x = undefined; pointer.y = undefined; });
 
 function animateParticles() {
@@ -325,33 +320,35 @@ function highlightNextImage() {
 
 // ==================== KHỞI CHẠY CHÍNH CỦA HIỆU ỨNG 20/10 ====================
 
+// ==================== KHỞI CHẠY CHÍNH CỦA HIỆU ỨNG 20/10 ====================
+
+// Thêm cờ để kiểm soát việc đã gắn Listener chưa
+let listenersAttached = false; 
+
 function start2010Effects() {
+    // 1. Reset trạng thái hạt: Đảm bảo không có tương tác sớm
+    isParticlesReady = false; 
+
+    // 2. Setup ảnh và hạt
     setupImages();
     setTimeout(highlightNextImage, 1000 + imageUrls.length * 100 + 500);
 
     createParticles();
-    animateParticleMotion();
+    animateParticleMotion(); // Chạy animation để các hạt di chuyển từ tâm ra
 
     setInterval(createFallingHeart, 200);
-}
 
-// Bắt đầu các sự kiện liên quan đến resize 
-window.addEventListener("resize", () => {
-    if (document.getElementById('main-content').style.opacity == 1) {
-        // Fix: Dừng animation và đặt lại vị trí tức thời khi resize
-        anime.remove(particles);
-        
-        // Tạo lại hạt và đặt chúng NGAY LẬP TỨC vào vị trí cuối cùng mới (true = instant)
-        createParticles(true); 
-        
-        // Cần setupImages lại để hình ảnh xếp đúng vị trí mới
-        setupImages();
-
-        // Tiếp tục vòng lặp vẽ/tương tác
-        animateParticles(); 
+    // 3. Gắn sự kiện lắng nghe tương tác CHỈ KHI CHƯA GẮN
+    if (!listenersAttached) {
+        window.addEventListener("mousemove", e => { pointer.x = e.x; pointer.y = e.y; });
+        window.addEventListener("touchmove", e => {
+            const t = e.touches[0];
+            pointer.x = t.clientX; pointer.y = t.clientY; e.preventDefault();
+        });
+        window.addEventListener("touchend", () => { pointer.x = undefined; pointer.y = undefined; });
+        listenersAttached = true;
     }
-});
-
+}
 // ==================== TRÁI TIM RƠI ====================
 const heartContainer = document.getElementById("fallingHearts");
 function createFallingHeart() {
@@ -367,6 +364,7 @@ function createFallingHeart() {
     heartContainer.appendChild(heart);
     setTimeout(() => heart.remove(), 8000);
 }
+
 
 
 
