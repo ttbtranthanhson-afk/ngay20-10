@@ -114,9 +114,9 @@ body {
 
     /* 2. Điều chỉnh Message Box */
     #messageBox {
-        width: 95%; 
-        max-width: 95%;
-        padding: 10px;
+        width: 80%; 
+        max-width: 80%;
+        padding: 8px;
     }
 
     #messageBox h1 {
@@ -125,6 +125,7 @@ body {
 
     #messageBox p {
         font-size: 2.5vw; /* Dùng viewport width */
+        line-height: 1.4;
     }
 
     /* 3. Điều chỉnh ảnh */
@@ -139,6 +140,7 @@ body {
         font-size: 8px !important;
     }
 }
+
 
 
 
