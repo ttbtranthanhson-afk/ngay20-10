@@ -150,7 +150,7 @@ function createParticles(instant = false) {
     // Tối ưu hóa: Thay đổi scaleFactor dựa trên kích thước màn hình
     let scaleFactor = 0.55; 
     if (window.innerWidth <= 600) {
-        scaleFactor = 0.33; // Nhỏ hơn cho điện thoại
+        scaleFactor = 0.43; // Nhỏ hơn cho điện thoại
     }
     
     const scale = Math.min(window.innerWidth, window.innerHeight) * scaleFactor; 
@@ -253,7 +253,7 @@ const imgElements = [];
 
 function setupImages() {
     // Tối ưu hóa: Tính toán imageScale ngay tại thời điểm setup
-    const imageScale = window.innerWidth > 600 ? 14 : 8; 
+    const imageScale = window.innerWidth > 600 ? 16 : 10; 
     
     container.innerHTML = '';
     imgElements.length = 0;
@@ -357,4 +357,5 @@ function createFallingHeart() {
     heartContainer.appendChild(heart);
     setTimeout(() => heart.remove(), 8000);
 }
+
 
