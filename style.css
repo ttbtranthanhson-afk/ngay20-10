@@ -114,23 +114,23 @@ body {
 
     /* 2. Điều chỉnh Message Box */
     #messageBox {
-        width: 85%; 
-        max-width: 85%;
+        width: 95%; 
+        max-width: 95%;
         padding: 10px;
     }
 
     #messageBox h1 {
-        font-size: 5vw; /* Dùng viewport width */
+        font-size: 4.5vw; /* Dùng viewport width */
     }
 
     #messageBox p {
-        font-size: 3.5vw; /* Dùng viewport width */
+        font-size: 3vw; /* Dùng viewport width */
     }
 
     /* 3. Điều chỉnh ảnh */
     #imageContainer img {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
         border-radius: 10px;
     }
     
@@ -139,4 +139,5 @@ body {
         font-size: 8px !important;
     }
 }
+
 
