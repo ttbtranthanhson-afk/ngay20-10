@@ -150,7 +150,7 @@ function createParticles(instant = false) {
     // Tối ưu hóa: Thay đổi scaleFactor dựa trên kích thước màn hình
     let scaleFactor = 0.55; 
     if (window.innerWidth <= 600) {
-        scaleFactor = 0.43; // Nhỏ hơn cho điện thoại
+        scaleFactor = 0.30; // Nhỏ hơn cho điện thoại
     }
     
     const scale = Math.min(window.innerWidth, window.innerHeight) * scaleFactor; 
@@ -357,6 +357,7 @@ function createFallingHeart() {
     heartContainer.appendChild(heart);
     setTimeout(() => heart.remove(), 8000);
 }
+
 
 
 
