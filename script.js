@@ -253,7 +253,7 @@ const imgElements = [];
 
 function setupImages() {
     // Tối ưu hóa: Tính toán imageScale ngay tại thời điểm setup
-    const imageScale = window.innerWidth > 600 ? 16 : 10; 
+    const imageScale = window.innerWidth > 600 ? 16 : 12; 
     
     container.innerHTML = '';
     imgElements.length = 0;
@@ -357,5 +357,6 @@ function createFallingHeart() {
     heartContainer.appendChild(heart);
     setTimeout(() => heart.remove(), 8000);
 }
+
 
 
