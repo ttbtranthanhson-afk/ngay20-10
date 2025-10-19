@@ -124,7 +124,7 @@ body {
     }
 
     #messageBox p {
-        font-size: 3vw; /* Dùng viewport width */
+        font-size: 2.5vw; /* Dùng viewport width */
     }
 
     /* 3. Điều chỉnh ảnh */
@@ -139,5 +139,6 @@ body {
         font-size: 8px !important;
     }
 }
+
 
 
