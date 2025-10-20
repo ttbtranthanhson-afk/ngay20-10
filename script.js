@@ -256,6 +256,30 @@ for (let i = 0; i < Math.PI * 2; i += (2 * Math.PI) / imageUrls.length) imageHea
 
 const imgElements = [];
 
+function preloadImages() {
+    return new Promise((resolve) => {
+        let loadedCount = 0;
+        const totalImages = imageUrls.length;
+
+        if (totalImages === 0) {
+            resolve();
+            return;
+        }
+
+        imageUrls.forEach((url) => {
+            const img = new Image();
+            img.onload = () => {
+                loadedCount++;
+                if (loadedCount === totalImages) {
+                    resolve(); // Giải quyết Promise khi TẤT CẢ ảnh đã tải xong
+                }
+            };
+            img.onerror = img.onload; // Nếu lỗi, vẫn coi là tải xong để không bị kẹt
+            img.src = url;
+        });
+    });
+}
+
 function setupImages() {
     // Tối ưu hóa: Tính toán imageScale ngay tại thời điểm setup
     const imageScale = window.innerWidth > 600 ? 16 : 11; 
@@ -320,8 +344,6 @@ function highlightNextImage() {
 
 // ==================== KHỞI CHẠY CHÍNH CỦA HIỆU ỨNG 20/10 ====================
 
-// ==================== KHỞI CHẠY CHÍNH CỦA HIỆU ỨNG 20/10 ====================
-
 // Thêm cờ để kiểm soát việc đã gắn Listener chưa
 let listenersAttached = false; 
 
@@ -329,16 +351,7 @@ function start2010Effects() {
     // 1. Reset trạng thái hạt: Đảm bảo không có tương tác sớm
     isParticlesReady = false; 
 
-    // 2. Setup ảnh và hạt
-    setupImages();
-    setTimeout(highlightNextImage, 1000 + imageUrls.length * 100 + 500);
-
-    createParticles();
-    animateParticleMotion(); // Chạy animation để các hạt di chuyển từ tâm ra
-
-    setInterval(createFallingHeart, 200);
-
-    // 3. Gắn sự kiện lắng nghe tương tác CHỈ KHI CHƯA GẮN
+    // 2. Gắn sự kiện lắng nghe tương tác (Chỉ cần chạy 1 lần)
     if (!listenersAttached) {
         window.addEventListener("mousemove", e => { pointer.x = e.x; pointer.y = e.y; });
         window.addEventListener("touchmove", e => {
@@ -348,6 +361,27 @@ function start2010Effects() {
         window.addEventListener("touchend", () => { pointer.x = undefined; pointer.y = undefined; });
         listenersAttached = true;
     }
+
+    // 3. Khởi tạo trái tim rơi (Có thể chạy ngay lập tức vì không phụ thuộc ảnh)
+    // Dùng biến để tránh setInterval chạy lại nếu hàm này được gọi nhiều lần (ví dụ: trên resize)
+    if (!window._fallingHeartInterval) {
+        window._fallingHeartInterval = setInterval(createFallingHeart, 200);
+    }
+
+    // 4. Bắt đầu Preload ảnh và CHỜ TẢI XONG
+    preloadImages().then(() => {
+        
+        // 🌟 LOGIC CHÍNH: CHỈ CHẠY HIỆU ỨNG ẢNH VÀ HẠT SAU KHI TẤT CẢ ẢNH ĐÃ TẢI XONG 🌟
+        setupImages();
+        
+        // Chờ 100ms và bắt đầu hiệu ứng ảnh, hạt
+        setTimeout(() => {
+            highlightNextImage();
+            
+            createParticles();
+            animateParticleMotion(); 
+        }, 100); 
+    });
 }
 // ==================== TRÁI TIM RƠI ====================
 const heartContainer = document.getElementById("fallingHearts");
@@ -356,7 +390,7 @@ function createFallingHeart() {
     heart.classList.add("heart");
     heart.innerText = "❤";
     heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = Math.random() * 14 + 10 + "px";
+    heart.style.fontSize = Math.random() * 14 + 15 + "px";
     heart.style.animationDuration = 4 + Math.random() * 4 + "s";
     heart.style.opacity = Math.random() * 0.5 + 0.2;
     heart.style.color = `rgba(255, ${80 + Math.random() * 80}, ${120 + Math.random() * 80}, 0.3)`;
@@ -364,6 +398,7 @@ function createFallingHeart() {
     heartContainer.appendChild(heart);
     setTimeout(() => heart.remove(), 8000);
 }
+
 
 
 
