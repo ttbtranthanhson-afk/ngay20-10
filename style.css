@@ -23,7 +23,7 @@ body {
 .heart {
     position: absolute;
     color: rgba(255, 100, 150, 0.3);
-    font-size: 16px;
+    font-size: 24px;
     animation: fall linear infinite;
 }
 
@@ -137,9 +137,10 @@ body {
     
     /* 4. Giảm kích thước trái tim rơi */
     .heart {
-        font-size: 8px !important;
+        font-size: 18px !important;
     }
 }
+
 
 
 
